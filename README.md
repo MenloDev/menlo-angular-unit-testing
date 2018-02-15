@@ -1,4 +1,5 @@
-# MenloAngularUnitTesting
+# Menlo Angular Unit Testing Examples
+This project is intended to complement the Menlo Developer Blog by the same name. The intention is to make the final copy of this project public for anyone to view or clone. 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.8.
 
