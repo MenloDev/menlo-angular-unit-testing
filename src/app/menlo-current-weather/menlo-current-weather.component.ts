@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {WeatherService} from "../weather-service/weather.service";
+import CurrentWeather from "../weather-service/current-weather.model";
 
 @Component({
   selector: 'menlo-current-weather',
@@ -8,11 +9,14 @@ import {WeatherService} from "../weather-service/weather.service";
 })
 export class MenloCurrentWeatherComponent implements OnInit {
 
+  public currentWeatherModel: CurrentWeather;
+
   constructor(private weatherService: WeatherService){}
 
   ngOnInit() {
-    this.weatherService.getCurrentMenloWeather().then((weatherData) => {
-      console.log("Weather Data: ", weatherData)
+    this.weatherService.getCurrentMenloWeather().then((currentWeather:CurrentWeather) => {
+      this.currentWeatherModel = currentWeather;
+      console.log("WE HAVE WEATHER!")
     })
   }
 

@@ -1,9 +1,8 @@
 import CurrentWeather from "./current-weather.model";
 
-fdescribe('Current Weather Model', () => {
+describe('Current Weather Model', () => {
 
-  beforeEach(() => {
-  });
+  beforeEach(() => {});
 
   it('fromJson should build a CurrentWeatherModel with correctly assigned properties from the JSON object', () => {
 

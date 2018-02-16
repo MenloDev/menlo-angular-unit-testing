@@ -5,7 +5,7 @@ import CurrentWeather from "./current-weather.model";
 
 let TestDouble = require('testdouble');
 
-fdescribe('WeatherService', () => {
+describe('WeatherService', () => {
   let weatherService;
 
   let MockHttpClientConstructor = TestDouble.constructor(HttpClient);
