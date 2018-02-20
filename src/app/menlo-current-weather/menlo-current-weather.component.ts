@@ -16,7 +16,6 @@ export class MenloCurrentWeatherComponent implements OnInit {
   ngOnInit() {
     this.weatherService.getCurrentMenloWeather().then((currentWeather:CurrentWeather) => {
       this.currentWeatherModel = currentWeather;
-      console.log("WE HAVE WEATHER!")
     })
   }
 

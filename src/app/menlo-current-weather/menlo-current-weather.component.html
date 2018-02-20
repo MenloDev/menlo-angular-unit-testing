@@ -2,12 +2,12 @@
 
 <div *ngIf="currentWeatherModel" class="card" style="width: 18rem;">
   <img class="card-img-top" src="https://www.metaweather.com/static/img/weather/{{currentWeatherModel.stateAbbreviation}}.svg" alt="Card image cap">
-  <!--<div class="card-body">-->
-    <!--<h5 class="card-title">{{currentWeatherModel.stateName}}</h5>-->
-    <!--<ul class="list-group list-group-flush">-->
-      <!--<li class="list-group-item"><strong>Current:</strong> {{currentWeatherModel.currentTemp}}</li>-->
-      <!--<li class="list-group-item"><strong>High:</strong> {{currentWeatherModel.highTemp}}</li>-->
-      <!--<li class="list-group-item"><strong>Low:</strong> {{currentWeatherModel.lowTemp}}</li>-->
-    <!--</ul>-->
-  <!--</div>-->
+  <div class="card-body">
+    <h5 class="card-title">{{currentWeatherModel.stateName}}</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><strong>Current:</strong> {{currentWeatherModel.currentTemp}}</li>
+      <li class="list-group-item"><strong>High:</strong> {{currentWeatherModel.highTemp}}</li>
+      <li class="list-group-item"><strong>Low:</strong> {{currentWeatherModel.lowTemp}}</li>
+    </ul>
+  </div>
 </div>
