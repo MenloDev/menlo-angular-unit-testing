@@ -1,6 +1,7 @@
 import {TestBed, async} from '@angular/core/testing';
 import {AppComponent} from './app.component';
 import {MenloCurrentWeatherComponent} from "./menlo-current-weather/menlo-current-weather.component";
+import {FahrenheitPipe} from "./weather-service/fahrenheit.pipe";
 
 let TestDouble = require('testdouble');
 
@@ -14,7 +15,8 @@ describe('AppComponent', () => {
       TestBed.configureTestingModule({
         declarations: [
           AppComponent,
-          TestDouble.constructor(MenloCurrentWeatherComponent)
+          TestDouble.constructor(MenloCurrentWeatherComponent),
+          TestDouble.constructor(FahrenheitPipe)
         ],
         providers: []
       }).compileComponents();

@@ -5,9 +5,12 @@
   <div class="card-body">
     <h5 class="card-title">{{currentWeatherModel.stateName}}</h5>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item"><strong>Current:</strong> {{currentWeatherModel.currentTemp}}</li>
-      <li class="list-group-item"><strong>High:</strong> {{currentWeatherModel.highTemp}}</li>
-      <li class="list-group-item"><strong>Low:</strong> {{currentWeatherModel.lowTemp}}</li>
+      <li class="list-group-item">
+        <strong>Current:</strong> {{currentWeatherModel.currentTemp | fahrenheit}}</li>
+      <li class="list-group-item">
+        <strong>High:</strong> {{currentWeatherModel.highTemp | fahrenheit}}</li>
+      <li class="list-group-item">
+        <strong>Low:</strong> {{currentWeatherModel.lowTemp | fahrenheit}}</li>
     </ul>
   </div>
 </div>

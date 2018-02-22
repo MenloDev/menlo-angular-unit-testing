@@ -2,12 +2,14 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MenloCurrentWeatherComponent} from './menlo-current-weather.component';
 import {WeatherService} from "../weather-service/weather.service";
 import CurrentWeather from "../weather-service/current-weather.model";
+import {FahrenheitPipe} from "../weather-service/fahrenheit.pipe";
 
 let TestDouble = require('testdouble');
 
 describe('MenloCurrentWeatherComponent', () => {
-  let MockWeatherServiceConstructor = TestDouble.constructor(WeatherService);
-  let mockWeatherService;
+  let MockWeatherService = TestDouble.constructor(WeatherService);
+  let MockFahrenheitPipe = TestDouble.constructor(FahrenheitPipe);
+
   let expectedCurrentWeatherModel;
 
   let component: MenloCurrentWeatherComponent;
@@ -17,15 +19,18 @@ describe('MenloCurrentWeatherComponent', () => {
   beforeEach(async(() => {
 
     expectedCurrentWeatherModel = new CurrentWeather();
-    mockWeatherService = new MockWeatherServiceConstructor();
-    TestDouble.when(mockWeatherService.getCurrentMenloWeather()).thenResolve(expectedCurrentWeatherModel);
+
+    TestDouble.when(MockWeatherService.prototype.getCurrentMenloWeather()).thenResolve(expectedCurrentWeatherModel);
 
     TestBed.configureTestingModule({
-      declarations: [MenloCurrentWeatherComponent],
+      declarations: [
+        MenloCurrentWeatherComponent,
+        MockFahrenheitPipe
+      ],
       providers: [
         {
           provide: WeatherService,
-          useValue: mockWeatherService
+          useValue:  new MockWeatherService()
         }
       ]
     })
@@ -90,6 +95,14 @@ describe('MenloCurrentWeatherComponent', () => {
       expectedCurrentWeatherModel.highTemp = 81.3;
       expectedCurrentWeatherModel.lowTemp = 67.4;
 
+      let expectedCurrentTemp = '56';
+      let expectedHighTemp = '75';
+      let expectedLowTemp = '45';
+
+      TestDouble.when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.currentTemp)).thenReturn(expectedCurrentTemp);
+      TestDouble.when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.highTemp)).thenReturn(expectedHighTemp);
+      TestDouble.when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.lowTemp)).thenReturn(expectedLowTemp);
+
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
@@ -101,14 +114,14 @@ describe('MenloCurrentWeatherComponent', () => {
 
         expect(unorderedListItems.length).toEqual(3);
 
-        checkTemperatureListItems(expectedCurrentWeatherModel.currentTemp, 'Current', unorderedListItems[0]);
-        checkTemperatureListItems(expectedCurrentWeatherModel.highTemp, 'High', unorderedListItems[1]);
-        checkTemperatureListItems(expectedCurrentWeatherModel.lowTemp, 'Low', unorderedListItems[2]);
+        checkTemperatureListItems(expectedCurrentTemp, 'Current', unorderedListItems[0]);
+        checkTemperatureListItems(expectedHighTemp, 'High', unorderedListItems[1]);
+        checkTemperatureListItems(expectedLowTemp, 'Low', unorderedListItems[2]);
 
       });
     }));
 
-    function checkTemperatureListItems(expectedTemperature: number, expectedLabel: String, listItem: any) {
+    function checkTemperatureListItems(expectedTemperature: string, expectedLabel: String, listItem: any) {
       expect(listItem.innerText).toEqual(`${expectedLabel}: ${expectedTemperature}`);
       expect(listItem.querySelector('strong').innerText).toEqual(`${expectedLabel}:`);
     }
