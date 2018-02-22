@@ -6,7 +6,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 
 import { WeatherService } from "./weather-service/weather.service";
 import { MenloCurrentWeatherComponent } from './menlo-current-weather/menlo-current-weather.component';
-import { FahrenheitPipe } from './weather-service/fahrenheit.pipe';
+import { FahrenheitPipe } from './menlo-current-weather/fahrenheit/fahrenheit.pipe';
 
 
 @NgModule({

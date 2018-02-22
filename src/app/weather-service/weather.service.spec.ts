@@ -1,7 +1,7 @@
 import { WeatherService } from './weather.service';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import CurrentWeather from "./current-weather.model";
+import CurrentWeather from "../current-weather-model/current-weather.model";
 
 let TestDouble = require('testdouble');
 

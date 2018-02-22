@@ -1,16 +1,20 @@
 <h1>The Current Weather at Menlo:</h1>
-
 <div *ngIf="currentWeatherModel" class="card" style="width: 18rem;">
-  <img class="card-img-top" src="https://www.metaweather.com/static/img/weather/{{currentWeatherModel.stateAbbreviation}}.svg" alt="Card image cap">
+  <img class="card-img-top"
+       src="https://www.metaweather.com/static/img/weather/{{currentWeatherModel.stateAbbreviation}}.svg"
+       alt="Card image cap">
   <div class="card-body">
     <h5 class="card-title">{{currentWeatherModel.stateName}}</h5>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
-        <strong>Current:</strong> {{currentWeatherModel.currentTemp | fahrenheit}}</li>
+        <strong>Current:</strong> {{currentWeatherModel.currentTemp | fahrenheit}}
+      </li>
       <li class="list-group-item">
-        <strong>High:</strong> {{currentWeatherModel.highTemp | fahrenheit}}</li>
+        <strong>High:</strong> {{currentWeatherModel.highTemp | fahrenheit}}
+      </li>
       <li class="list-group-item">
-        <strong>Low:</strong> {{currentWeatherModel.lowTemp | fahrenheit}}</li>
+        <strong>Low:</strong> {{currentWeatherModel.lowTemp | fahrenheit}}
+      </li>
     </ul>
   </div>
 </div>

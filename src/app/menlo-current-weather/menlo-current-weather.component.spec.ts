@@ -1,8 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MenloCurrentWeatherComponent} from './menlo-current-weather.component';
 import {WeatherService} from "../weather-service/weather.service";
-import CurrentWeather from "../weather-service/current-weather.model";
-import {FahrenheitPipe} from "../weather-service/fahrenheit.pipe";
+import CurrentWeather from "../current-weather-model/current-weather.model";
+import {FahrenheitPipe} from "./fahrenheit/fahrenheit.pipe";
 
 let TestDouble = require('testdouble');
 
@@ -20,7 +20,9 @@ describe('MenloCurrentWeatherComponent', () => {
 
     expectedCurrentWeatherModel = new CurrentWeather();
 
-    TestDouble.when(MockWeatherService.prototype.getCurrentMenloWeather()).thenResolve(expectedCurrentWeatherModel);
+    TestDouble
+      .when(MockWeatherService.prototype.getCurrentMenloWeather())
+      .thenResolve(expectedCurrentWeatherModel);
 
     TestBed.configureTestingModule({
       declarations: [
@@ -99,9 +101,17 @@ describe('MenloCurrentWeatherComponent', () => {
       let expectedHighTemp = '75';
       let expectedLowTemp = '45';
 
-      TestDouble.when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.currentTemp)).thenReturn(expectedCurrentTemp);
-      TestDouble.when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.highTemp)).thenReturn(expectedHighTemp);
-      TestDouble.when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.lowTemp)).thenReturn(expectedLowTemp);
+      TestDouble
+        .when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.currentTemp))
+        .thenReturn(expectedCurrentTemp);
+
+      TestDouble
+        .when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.highTemp))
+        .thenReturn(expectedHighTemp);
+
+      TestDouble
+        .when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.lowTemp))
+        .thenReturn(expectedLowTemp);
 
       fixture.detectChanges();
 
