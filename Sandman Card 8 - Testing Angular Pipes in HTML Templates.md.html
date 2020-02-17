@@ -1,0 +1,197 @@
+<html>
+<head>
+<title>Sandman Card 8 - Testing Angular Pipes in HTML Templates.md</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #a9b7c6;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #cc7832;}
+.s3 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Sandman Card 8 - Testing Angular Pipes in HTML Templates.md</font>
+</center></td></tr></table>
+<pre><span class="s0">***</span><span class="s1">Open this file in a markdown editor to see formatting</span><span class="s0">***</span>
+
+<span class="s0">**</span><span class="s1">This one should be popular – not a lot of help on this topic on the internet. It took me </span><span class="s0">(</span><span class="s1">RBEL</span><span class="s0">) </span><span class="s1">quite a while to figure out the best way.</span><span class="s0">**</span>
+
+<span class="s0">***</span><span class="s1">Example Code is on dev@menloinnovations GitHub account menlo-angular-unit-testing</span><span class="s0">***</span>
+<span class="s0">***</span><span class="s1">As part of Orange/Green dotting, please make sure code snip-its match the example project </span><span class="s0">(</span><span class="s1">“...” in snip-its indicate that there is additional code in the example that is not needed for current context; this helps reduce snip-it sizes</span><span class="s0">)</span>
+
+<span class="s2">#</span><span class="s1">Testing Angular Pipes in HTML Templates</span>
+<span class="s2">##</span><span class="s1">By Rob Bell, Senior Developer at Menlo Innovations</span>
+
+<span class="s1">Most applications fetch data from an API and then present it to users on the screen. Usually the data we receive</span>
+<span class="s1">is not in the best format to present to end users. Angular solves this problem with Pipes. Pipes allow you to format </span>
+<span class="s1">or transform your data directly in your HTML template. For example, displaying a date in a human readable form or UPPERCASEING a string.</span>
+<span class="s1">They also offer a way to keep UI or display logic separate from business logic.</span>
+
+<span class="s0">*&lt;</span><span class="s1">More explanation about pipes and why to use them?</span><span class="s0">&gt;*</span>
+
+<span class="s1">Unit testing the pipes themselves is straightforward but testing their usage in the template can be tricky. </span>
+<span class="s1">This article will demonstrate one way to unit test a pipe as well as test that it is being used in a template.</span>
+
+<span class="s1">In our example project, the temperature data we get from the weather API is in Celsius. This works great </span>
+<span class="s1">for most of the world, but our users in the United States will be more accustomed to seeing the temperature </span>
+<span class="s1">in Fahrenheit. This is where a pipe comes in handy. Let’s take a look at the fahrenheit.pipe.ts</span><span class="s0">:</span>
+
+<span class="s3">```</span><span class="s1">fahrenheit.pipe.ts</span><span class="s0">:</span><span class="s3">```</span>
+
+<span class="s3">```typescript</span>
+<span class="s3">import { Pipe, PipeTransform } from '@angular/core';</span>
+
+<span class="s3">@Pipe({name: 'fahrenheit'})</span>
+<span class="s3">export class FahrenheitPipe implements PipeTransform {</span>
+    <span class="s3">transform(celsius: number): number {</span>
+        <span class="s3">return Math.round(celsius * 1.8 + 32);</span>
+    <span class="s3">}</span>
+<span class="s3">}</span>
+<span class="s3">```</span>
+
+<span class="s1">Our pipe inherits the transform function from PipeTransform, which takes in the Celsius value, makes the conversion to Fahrenheit, </span>
+<span class="s1">and then rounds the result to a whole number. The @Pipe</span><span class="s0">(</span><span class="s1">{name</span><span class="s0">: '</span><span class="s1">fahrenheit'}</span><span class="s0">) </span><span class="s1">class decorator not only tells </span>
+<span class="s1">Angular that this class is a pipe, but also declares the name we </span>
+<span class="s1">will use to access this pipe in our HTML template. Outside of the @Pipe class decorator, pipes are </span>
+<span class="s1">simply a typescript class, so we will not need any special setup. Let’s take a quick look at our </span>
+<span class="s1">Fahrenheit pipe’s test</span><span class="s0">:</span>
+
+<span class="s3">```</span><span class="s1">fahrenheit.pipe.spec.ts</span><span class="s0">:</span><span class="s3">```</span>
+
+<span class="s3">```typescript</span>
+<span class="s3">it('should convert from celsius to fahrenheit', () =&gt; {</span>
+    <span class="s3">const pipe = new FahrenheitPipe();</span>
+
+    <span class="s3">let testCases = [</span>
+        <span class="s3">{fahrenheit: 32, celsius: 0},</span>
+        <span class="s3">{fahrenheit: 110, celsius: 43.3422},</span>
+        <span class="s3">{fahrenheit: 72, celsius: 22.121},</span>
+        <span class="s3">{fahrenheit: 64, celsius: 18},</span>
+        <span class="s3">{fahrenheit: -15, celsius: -26.02},</span>
+        <span class="s3">{fahrenheit: -1, celsius: -18.111111}</span>
+    <span class="s3">];</span>
+
+    <span class="s3">for(let testCase of testCases) {</span>
+        <span class="s3">expect(pipe.transform(testCase.celsius)).toEqual(testCase.fahrenheit);</span>
+    <span class="s3">}</span>
+<span class="s3">});</span>
+<span class="s3">```</span>
+
+<span class="s1">Our pipe needs to be included in our app.module.ts for our components to be able to use it.</span>
+<span class="s1">If you use the Angular CLI ng generate command to create your pipes, it does this for you automatically</span><span class="s0">!</span>
+
+<span class="s3">```</span><span class="s1">app.module.ts</span><span class="s3">```</span>
+
+<span class="s3">```typescript</span>
+<span class="s3">declarations: [</span>
+    <span class="s3">…</span>
+    <span class="s3">FahrenheitPipe</span>
+<span class="s3">],</span>
+<span class="s3">```</span>
+<span class="s1">Now we can look at how we actually use our pipe. In our menlo-current-weather.component.html we display the current, </span>
+<span class="s1">high, and low temperatures as list items The temperatures come from the currentWeatherModel object that originally came from </span>
+<span class="s1">the API call.</span>
+
+<span class="s3">```</span><span class="s1">menlo-current-weather.component.html</span><span class="s0">:</span><span class="s3">```</span>
+<span class="s3">```html</span>
+<span class="s3">&lt;ul class=&quot;list-group list-group-flush&quot;&gt;</span>
+    <span class="s3">&lt;li class=&quot;list-group-item&quot;&gt;</span>
+        <span class="s3">&lt;strong&gt;Current:&lt;/strong&gt; {{currentWeatherModel.currentTemp | fahrenheit}}</span>
+    <span class="s3">&lt;/li&gt;</span>
+    <span class="s3">&lt;li class=&quot;list-group-item&quot;&gt;</span>
+        <span class="s3">&lt;strong&gt;High:&lt;/strong&gt; {{currentWeatherModel.highTemp | fahrenheit}}</span>
+    <span class="s3">&lt;/li&gt;</span>
+    <span class="s3">&lt;li class=&quot;list-group-item&quot;&gt;</span>
+        <span class="s3">&lt;strong&gt;Low:&lt;/strong&gt; {{currentWeatherModel.lowTemp | fahrenheit}}</span>
+    <span class="s3">&lt;/li&gt;</span>
+<span class="s3">&lt;/ul&gt;</span>
+<span class="s3">```</span>
+<span class="s1">As you can see above, using the pipe is as simple as using the ‘|‘ </span><span class="s0">(</span><span class="s1">pipe</span><span class="s0">) </span><span class="s1">operator after our value that we want to </span>
+<span class="s1">transform, then referring to our pipe by its name. And user will be see the temperature in Fahrenheit instead </span>
+<span class="s1">of Celsius.</span>
+
+<span class="s1">Now comes the interesting part. How do we test that we are using our pipe in our component’s unit test? </span>
+<span class="s1">We could do the Fahrenheit-to-Celsius conversion ourselves in our test to get our expected value, but this is </span>
+<span class="s1">not the best idea. If our pipe’s functionality changes </span><span class="s0">(</span><span class="s1">for example, we want to show the temperature up to 2 </span>
+<span class="s1">decimal points</span><span class="s0">) </span><span class="s1">then our components tests will fail. This coupling between our pipe and our component’s test </span>
+<span class="s1">would become increasingly difficult to maintain as our project increases in size. Fortunately, there is a better </span>
+<span class="s1">way; we can mock our pipe in our component’s test and configure it to return a specific response based on what is </span>
+<span class="s1">passed to the pipe’s transform function.</span>
+
+<span class="s1">First, we need to configure our beforeEach to register our mock pipe with the TestingModule</span><span class="s0">:</span>
+
+<span class="s3">```</span><span class="s1">menlo-current-weather.component.spec.ts</span><span class="s0">:</span><span class="s3">```</span>
+<span class="s3">```typescript</span>
+<span class="s3">let MockFahrenheitPipe = TestDouble.constructor(FahrenheitPipe);</span>
+
+<span class="s3">beforeEach(async(() =&gt; {</span>
+<span class="s3">...</span>
+    <span class="s3">TestBed.configureTestingModule({</span>
+        <span class="s3">declarations: [</span>
+            <span class="s3">MenloCurrentWeatherComponent,</span>
+            <span class="s3">MockFahrenheitPipe</span>
+        <span class="s3">],</span>
+        <span class="s3">providers: [</span>
+            <span class="s3">{ provide: WeatherService, useValue: new MockWeatherService() }</span>
+        <span class="s3">]</span>
+    <span class="s3">}).compileComponents();</span>
+<span class="s3">}));</span>
+<span class="s3">```</span>
+
+<span class="s1">In our test, we are going to have to tell our mock pipe what to return and when. Using Test Double, we can make it </span>
+<span class="s1">so that when ’70.1’ </span><span class="s0">(</span><span class="s1">the current temperature we told our the MockWeatherService to return</span><span class="s0">)</span><span class="s1">, is passed to the </span>
+<span class="s1">transform function of our mock pipe, it will return ‘56’. Obviously, 70.1 degrees Celsius is not ‘56’ degrees </span>
+<span class="s1">Fahrenheit, but that is not the focus of our test here. By asserting that the list item that is rendered by the </span>
+<span class="s1">HTML has a value of ‘56’ instead of ’70.1’, we can confirm that we are using our pipe where we intended, and that </span>
+<span class="s1">it is being passed the correct value.</span>
+
+<span class="s3">```typescript</span>
+<span class="s3">it('should display the current temperature', async(() =&gt; {</span>
+    <span class="s3">expectedCurrentWeatherModel.currentTemp = 70.1;</span>
+    <span class="s3">let expectedCurrentTemp = '56';</span>
+
+    <span class="s3">TestDouble</span>
+        <span class="s3">.when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.currentTemp))</span>
+        <span class="s3">.thenReturn(expectedCurrentTemp);</span>
+
+    <span class="s3">fixture.detectChanges();</span>
+
+    <span class="s3">fixture.whenStable().then(() =&gt; {</span>
+        <span class="s3">fixture.detectChanges();</span>
+
+        <span class="s3">const DOM = fixture.debugElement.nativeElement;</span>
+
+        <span class="s3">let unorderedListItems = DOM.querySelectorAll('div.card &gt; div.card-body &gt; ul.list-group.list-group-flush &gt; li.list-group-item');</span>
+
+        <span class="s3">let currentTempListItem = unorderedListItems[0];</span>
+
+        <span class="s3">expect(currentTempListItem.innerText).toEqual(`Current: ${expectedCurrentTemp}`);</span>
+        <span class="s3">expect(currentTempListItem.querySelector('strong').innerText).toEqual(`Current:`);</span>
+
+	<span class="s3">});</span>
+<span class="s3">}));</span>
+<span class="s3">```</span>
+
+
+<span class="s1">CONCLUSION </span>
+
+<span class="s1">We often don't see developers writing front end unit tests even though using a pipe adds logic to the front end. </span>
+<span class="s1">Our example shows how to use the Test Double mocking framework and a little bit of setup makes it easy for developers </span>
+<span class="s1">to write front end unit tests.</span>
+
+<span class="s0">&lt;!---</span>
+<span class="s0">pipes are awesome! they allow clear separation of presentation from logic for inclusion in templates.</span>
+
+<span class="s0">Pipes are a feature of Angular that allow you to format or transform your data directly in your HTML template. </span>
+<span class="s0">Sometimes our data is not always in the best format to present to end users.</span>
+
+<span class="s0">Pipes offer a simple and convenient way to perform on-the-fly data transformations and keep UI logic separate </span>
+<span class="s0">from business logic but testing them can be tricky.</span>
+
+<span class="s0">---&gt;</span>
+</pre>
+</body>
+</html>
