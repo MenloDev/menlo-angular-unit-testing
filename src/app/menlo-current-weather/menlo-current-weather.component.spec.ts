@@ -1,14 +1,14 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MenloCurrentWeatherComponent} from './menlo-current-weather.component';
-import {WeatherService} from "../weather-service/weather.service";
-import CurrentWeather from "../current-weather-model/current-weather.model";
-import {FahrenheitPipe} from "./fahrenheit/fahrenheit.pipe";
+import {WeatherService} from '../weather-service/weather.service';
+import CurrentWeather from '../current-weather-model/current-weather.model';
+import {FahrenheitPipe} from './fahrenheit/fahrenheit.pipe';
 
-let TestDouble = require('testdouble');
+const TestDouble = require('testdouble');
 
 describe('MenloCurrentWeatherComponent', () => {
-  let MockWeatherService = TestDouble.constructor(WeatherService);
-  let MockFahrenheitPipe = TestDouble.constructor(FahrenheitPipe);
+  const MockWeatherService = TestDouble.constructor(WeatherService);
+  const MockFahrenheitPipe = TestDouble.constructor(FahrenheitPipe);
 
   let expectedCurrentWeatherModel;
 
@@ -50,12 +50,12 @@ describe('MenloCurrentWeatherComponent', () => {
   });
 
   it('should fetch the current weather from the WeatherService', async(() => {
-    expectedCurrentWeatherModel.windDirection = "NNW";
+    expectedCurrentWeatherModel.windDirection = 'NNW';
 
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      expect(component.currentWeatherModel).toEqual(expectedCurrentWeatherModel)
+      expect(component.currentWeatherModel).toEqual(expectedCurrentWeatherModel);
     });
 
   }));
@@ -63,7 +63,7 @@ describe('MenloCurrentWeatherComponent', () => {
   describe('MenloCurrentWeatherComponent - HTML', () => {
 
     it('should display an icon that represents the current weather state', async(() => {
-      expectedCurrentWeatherModel.stateAbbreviation = "sn";
+      expectedCurrentWeatherModel.stateAbbreviation = 'sn';
 
       fixture.detectChanges();
 
@@ -73,12 +73,12 @@ describe('MenloCurrentWeatherComponent', () => {
         const DOM = fixture.debugElement.nativeElement;
 
         expect(DOM.querySelector('div.card > img.card-img-top').getAttribute('src'))
-          .toEqual(`https://www.metaweather.com/static/img/weather/${expectedCurrentWeatherModel.stateAbbreviation}.svg`)
+          .toEqual(`https://www.metaweather.com/static/img/weather/${expectedCurrentWeatherModel.stateAbbreviation}.svg`);
       });
     }));
 
     it('should display text that represents the current weather in the card title', async(() => {
-      expectedCurrentWeatherModel.stateName = "Sunny";
+      expectedCurrentWeatherModel.stateName = 'Sunny';
 
       fixture.detectChanges();
 
@@ -88,7 +88,7 @@ describe('MenloCurrentWeatherComponent', () => {
         const DOM = fixture.debugElement.nativeElement;
 
         expect(DOM.querySelector('div.card > div.card-body > h5.card-title').innerText)
-          .toEqual(expectedCurrentWeatherModel.stateName)
+          .toEqual(expectedCurrentWeatherModel.stateName);
       });
     }));
 
@@ -97,9 +97,9 @@ describe('MenloCurrentWeatherComponent', () => {
       expectedCurrentWeatherModel.highTemp = 81.3;
       expectedCurrentWeatherModel.lowTemp = 67.4;
 
-      let expectedCurrentTemp = '56';
-      let expectedHighTemp = '75';
-      let expectedLowTemp = '45';
+      const expectedCurrentTemp = '56';
+      const expectedHighTemp = '75';
+      const expectedLowTemp = '45';
 
       TestDouble
         .when(MockFahrenheitPipe.prototype.transform(expectedCurrentWeatherModel.currentTemp))
@@ -120,7 +120,7 @@ describe('MenloCurrentWeatherComponent', () => {
 
         const DOM = fixture.debugElement.nativeElement;
 
-        let unorderedListItems = DOM.querySelectorAll('div.card > div.card-body > ul.list-group.list-group-flush > li.list-group-item');
+        const unorderedListItems = DOM.querySelectorAll('div.card > div.card-body > ul.list-group.list-group-flush > li.list-group-item');
 
         expect(unorderedListItems.length).toEqual(3);
 

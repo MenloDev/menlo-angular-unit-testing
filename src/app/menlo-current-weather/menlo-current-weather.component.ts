@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {WeatherService} from "../weather-service/weather.service";
-import CurrentWeather from "../current-weather-model/current-weather.model";
+import {WeatherService} from '../weather-service/weather.service';
+import CurrentWeather from '../current-weather-model/current-weather.model';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'menlo-current-weather',
   templateUrl: './menlo-current-weather.component.html'
 })
@@ -15,7 +16,7 @@ export class MenloCurrentWeatherComponent implements OnInit {
   ngOnInit() {
     this.weatherService.getCurrentMenloWeather().then((currentWeather: CurrentWeather) => {
         this.currentWeatherModel = currentWeather;
-    })
+    });
   }
 
 }

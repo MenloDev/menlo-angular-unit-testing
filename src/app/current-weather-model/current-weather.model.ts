@@ -12,13 +12,13 @@ export default class CurrentWeather {
 
   public static fromJson(json: Object) {
 
-    let currentWeather = new CurrentWeather();
+    const currentWeather = new CurrentWeather();
 
     if (json['consolidated_weather']) {
-      let consolidatedWeather = json['consolidated_weather'];
+      const consolidatedWeather = json['consolidated_weather'];
 
       if (consolidatedWeather.length > 0) {
-        let currentWeatherJson = consolidatedWeather[0];
+        const currentWeatherJson = consolidatedWeather[0];
 
         currentWeather.stateName = currentWeatherJson['weather_state_name'];
         currentWeather.stateAbbreviation = currentWeatherJson['weather_state_abbr'];
