@@ -7,6 +7,20 @@ const TestDouble = require('testdouble');
 
 describe('WeatherService', () => {
   let weatherService;
+  const weatherJson = {
+    'consolidated_weather': [
+      {
+        'weather_state_name': 'Showers',
+        'weather_state_abbr': 's',
+        'wind_direction_compass': 'NNW',
+        'min_temp': -3.5219999999999998,
+        'max_temp': 5.2275000000000009,
+        'the_temp': 1.6899999999999999,
+        'wind_speed': 8.5681496927177285,
+        'wind_direction': 336.35076544904433
+      }
+    ]
+  };
 
   const MockHttpClientConstructor = TestDouble.constructor(HttpClient);
   let mockHttpClient;
@@ -14,6 +28,12 @@ describe('WeatherService', () => {
   beforeEach(() => {
     mockHttpClient = new MockHttpClientConstructor();
     weatherService = new WeatherService(mockHttpClient);
+
+    const MockObservableConstructor = TestDouble.constructor(Observable);
+    const mockObservable = new MockObservableConstructor();
+
+    TestDouble.when(mockObservable.subscribe()).thenCallback(weatherJson);
+    TestDouble.when(mockHttpClient.get(TestDouble.matchers.anything())).thenReturn(mockObservable);
   });
 
   it('should be created', () => {
@@ -27,35 +47,11 @@ describe('WeatherService', () => {
   });
 
   it('should subscribe to HttpClient.get() and resolve a promise when updated with the http response', (done: DoneFn) => {
-
-    const weatherJson = {
-      'consolidated_weather': [
-        {
-          'weather_state_name': 'Showers',
-          'weather_state_abbr': 's',
-          'wind_direction_compass': 'NNW',
-          'min_temp': -3.5219999999999998,
-          'max_temp': 5.2275000000000009,
-          'the_temp': 1.6899999999999999,
-          'wind_speed': 8.5681496927177285,
-          'wind_direction': 336.35076544904433
-        }
-      ]
-    };
-
     const expectedCurrentWeatherModel = CurrentWeather.fromJson(weatherJson);
-
-    const MockObservableConstructor = TestDouble.constructor(Observable);
-    const mockObservable = new MockObservableConstructor();
-
-    TestDouble.when(mockObservable.subscribe()).thenCallback(weatherJson);
-    TestDouble.when(mockHttpClient.get(TestDouble.matchers.anything())).thenReturn(mockObservable);
 
     weatherService.getCurrentMenloWeather().then((actualCurrentWeatherModel) => {
      expect(actualCurrentWeatherModel).toEqual(expectedCurrentWeatherModel);
      done();
     });
-
   });
-
 });
