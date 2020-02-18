@@ -1,9 +1,5 @@
 import { WeatherService } from './weather.service';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
 import CurrentWeather from '../current-weather-model/current-weather.model';
-
-const TestDouble = require('testdouble');
 
 describe('WeatherService', () => {
   let weatherService;
@@ -22,31 +18,15 @@ describe('WeatherService', () => {
     ]
   };
 
-  const MockHttpClientConstructor = TestDouble.constructor(HttpClient);
-  let mockHttpClient;
-
   beforeEach(() => {
-    mockHttpClient = new MockHttpClientConstructor();
-    weatherService = new WeatherService(mockHttpClient);
-
-    const MockObservableConstructor = TestDouble.constructor(Observable);
-    const mockObservable = new MockObservableConstructor();
-
-    TestDouble.when(mockObservable.subscribe()).thenCallback(weatherJson);
-    TestDouble.when(mockHttpClient.get(TestDouble.matchers.anything())).thenReturn(mockObservable);
+    weatherService = new WeatherService();
   });
 
   it('should be created', () => {
     expect(weatherService).toBeTruthy();
   });
 
-  it('should call get on the HttpClient with the correct URL', () => {
-    weatherService.getCurrentMenloWeather();
-
-    TestDouble.verify(mockHttpClient.get('https://crossorigin.me/https://www.metaweather.com/api/location/2391585/'));
-  });
-
-  it('should subscribe to HttpClient.get() and resolve a promise when updated with the http response', (done: DoneFn) => {
+  it('should resolve a promise when updated with the http response', (done: DoneFn) => {
     const expectedCurrentWeatherModel = CurrentWeather.fromJson(weatherJson);
 
     weatherService.getCurrentMenloWeather().then((actualCurrentWeatherModel) => {
